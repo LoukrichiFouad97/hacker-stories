@@ -1,5 +1,4 @@
-import React from "react";
-import { useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 
 import InputWithLabel from "./InputWithLabel";
 import UseSemiPersistentState from "./useSemiPersistentState";
@@ -27,14 +26,28 @@ function App() {
 		},
 	];
 
-	const [stories, setStories] = useState(INITIAL_STATE);
+	// action types
+	const SET_STORIES = "SET_STORIES";
+	const REMOVE_STORIES = "REMOVE_STORIES";
+
+	const storiesReducer = (state, { type, payload }) => {
+		switch (type) {
+			case SET_STORIES:
+				return payload;
+			case REMOVE_STORIES:
+				return state.filter((story) => story.objectID !== payload.objectID);
+			default:
+				return state;
+		}
+	};
+
+	const [stories, dispatchStories] = useReducer(storiesReducer, []);
+
+	const [isLoading, setIsLoading] = useState(false);
+	const [isError, setIsError] = useState(false);
 
 	const handleRemoveStory = (item) => {
-		const newStorties = stories.filter((story) => {
-			return item.objectID !== story.objectID;
-		});
-
-		setStories(newStorties);
+		dispatchStories({ type: "REMOVE_STORIES", payload: item });
 	};
 
 	const [searchTerm, setSearchTerm] = UseSemiPersistentState(
@@ -47,6 +60,26 @@ function App() {
 	const searchedStories = stories.filter((story) =>
 		story.title.toLowerCase().includes(searchTerm)
 	);
+
+	const getAsyncStories = () => {
+		return new Promise((resolve) => {
+			setTimeout(() => {
+				resolve({ data: { stories: INITIAL_STATE } });
+			}, 2000);
+		});
+	};
+
+	useEffect(() => {
+		setIsLoading(true);
+		getAsyncStories()
+			.then((result) => {
+				dispatchStories({ type: "SET_STORIES", payload: result.data.stories });
+				setIsLoading(false);
+			})
+			.catch(() => {
+				setIsError(true);
+			});
+	}, []);
 
 	return (
 		<>
@@ -63,7 +96,14 @@ function App() {
 			</InputWithLabel>
 			<p>You searched for: {searchTerm}</p>
 			<hr />
-			<List list={searchedStories} onRemoveItem={handleRemoveStory} />
+
+			{isError && <h3>Oops! Something went wrong...</h3>}
+
+			{isLoading ? (
+				<h3>Loading Stories</h3>
+			) : (
+				<List list={searchedStories} onRemoveItem={handleRemoveStory} />
+			)}
 		</>
 	);
 }
