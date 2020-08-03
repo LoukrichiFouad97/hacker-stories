@@ -7,6 +7,7 @@ const InputWithLabel = ({
 	searchTerm,
 	children,
 	isFocused,
+	handleSearchSubmit,
 }) => {
 	const inputRef = useRef();
 
@@ -17,20 +18,33 @@ const InputWithLabel = ({
 	}, [isFocused]);
 
 	return (
-		<div className="row d-flex align-items-center">
-			<label className='h4 mt-2 mr-1' htmlFor={id}>
-				{children}
-			</label>
-			&nbsp;
-			<input
-				type={type}
-				id={id}
-				onChange={onSearch}
-				value={searchTerm}
-				ref={inputRef}
-				className="col form-control"
-			/>
-		</div>
+		<form onSubmit={handleSearchSubmit}>
+			<div className="row d-flex align-items-center">
+				<label className="h4" htmlFor={id}>
+					{children}
+				</label>
+				&nbsp;
+				<div className="col input-group mb-3">
+					<input
+						type={type}
+						id={id}
+						onChange={onSearch}
+						value={searchTerm}
+						ref={inputRef}
+						className="form-control col"
+						placeholder="Search"
+					/>
+					<div className="input-group-append">
+						<button
+							className="input-group-text"
+							id="basic-addon2"
+						>
+							Search
+						</button>
+					</div>
+				</div>
+			</div>
+		</form>
 	);
 };
 

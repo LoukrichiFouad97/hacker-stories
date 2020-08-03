@@ -1,4 +1,5 @@
-import React, { useEffect, useReducer, useCallback } from "react";
+import React, { useEffect, useReducer, useCallback, useState } from "react";
+import axios from "axios";
 
 import InputWithLabel from "./InputWithLabel";
 import UseSemiPersistentState from "./useSemiPersistentState";
@@ -79,26 +80,37 @@ function App() {
 
 	const API_ENDPOINT = "https://hn.algolia.com/api/v1/search?query=";
 
-	const handleFetchStories = useCallback(() => {
+	const [url, setUrl] = useState(`${API_ENDPOINT}${searchTerm}`);
+
+	const handleFetchStories = useCallback(async () => {
 		if (!searchTerm) return;
 
 		dispatchStories({ type: STORIES_FETCH_INIT });
-		fetch(`${API_ENDPOINT}${searchTerm}`)
-			.then((res) => res.json())
-			.then((result) => {
-				return dispatchStories({
-					type: STORIES_FETCH_SUCCESS,
-					payload: result.hits,
-				});
-			})
-			.catch(() => {
-				dispatchStories({ type: STORIES_FETCH_FAILURE });
+
+		const data = await axios.get(url);
+
+		try {
+			dispatchStories({
+				type: STORIES_FETCH_SUCCESS,
+				payload: data.data.hits,
 			});
-	}, [searchTerm]);
+		} catch (err) {
+			dispatchStories({ type: STORIES_FETCH_FAILURE });
+		}
+	}, [url]);
 
 	useEffect(() => {
 		handleFetchStories();
 	}, [handleFetchStories]);
+
+	const handleSearchInput = ({ target: { value } }) => {
+		setSearchTerm(value);
+	};
+
+	const handleSearchSubmit = (e) => {
+		e.preventDefault();
+		setUrl(`${API_ENDPOINT}${searchTerm}`);
+	};
 
 	return (
 		<>
@@ -111,6 +123,8 @@ function App() {
 						type="search"
 						onSearch={changeHandler}
 						search={searchTerm}
+						onInputChange={handleSearchInput}
+						handleSearchSubmit={handleSearchSubmit}
 						isFocused
 					>
 						<strong>Search:</strong>
