@@ -17,8 +17,10 @@ const InputWithLabel = ({
 	}, [isFocused]);
 
 	return (
-		<>
-			<label htmlFor={id}>{children}</label>
+		<div className="row d-flex align-items-center">
+			<label className='h4 mt-2 mr-1' htmlFor={id}>
+				{children}
+			</label>
 			&nbsp;
 			<input
 				type={type}
@@ -26,8 +28,9 @@ const InputWithLabel = ({
 				onChange={onSearch}
 				value={searchTerm}
 				ref={inputRef}
+				className="col form-control"
 			/>
-		</>
+		</div>
 	);
 };
 

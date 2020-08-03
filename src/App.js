@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useReducer, useCallback } from "react";
 
 import InputWithLabel from "./InputWithLabel";
 import UseSemiPersistentState from "./useSemiPersistentState";
@@ -77,15 +77,11 @@ function App() {
 
 	const changeHandler = (e) => setSearchTerm(e.target.value);
 
-	const searchedStories = stories.data.filter((story) =>
-		story.title.toLowerCase().includes(searchTerm)
-	);
-
 	const API_ENDPOINT = "https://hn.algolia.com/api/v1/search?query=";
 
-	useEffect(() => {
+	const handleFetchStories = useCallback(() => {
 		if (!searchTerm) return;
-		
+
 		dispatchStories({ type: STORIES_FETCH_INIT });
 		fetch(`${API_ENDPOINT}${searchTerm}`)
 			.then((res) => res.json())
@@ -100,20 +96,32 @@ function App() {
 			});
 	}, [searchTerm]);
 
+	useEffect(() => {
+		handleFetchStories();
+	}, [handleFetchStories]);
+
 	return (
 		<>
-			<h1>My Hacker Stories</h1>
-			<InputWithLabel
-				id="search"
-				label="Search"
-				type="search"
-				onSearch={changeHandler}
-				search={searchTerm}
-				isFocused
-			>
-				<strong>Search:</strong>
-			</InputWithLabel>
-			<p>You searched for: {searchTerm}</p>
+			<div className="header bg-warning" style={{ height: "200px" }}>
+				<div className="h-100 container d-flex flex-column align-items-center justify-content-around">
+					<h1>My Hacker Stories</h1>
+					<InputWithLabel
+						id="search"
+						label="Search"
+						type="search"
+						onSearch={changeHandler}
+						search={searchTerm}
+						isFocused
+					>
+						<strong>Search:</strong>
+					</InputWithLabel>
+					<p>
+						You searched for:{" "}
+						<span className="font-weight-bold">{searchTerm}</span>{" "}
+					</p>
+				</div>
+			</div>
+
 			<hr />
 
 			{stories.isError && <h3>Oops! Something went wrong...</h3>}
