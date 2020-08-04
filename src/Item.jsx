@@ -6,16 +6,18 @@ const Item = ({ title, url, author, num_comments, points, onRemoveItem }) => {
 	}
 
 	return (
-		<div className=" container bg-warning my-1 p-3 d-flex justify-content-between align-items-center rounded">
-			<span>
+		<div className="item">
+			<span style={{ width: "40%" }}>
 				<a href={url}>{title}</a>
 			</span>
-			<span>{author}</span>
-			<span>{num_comments}</span>
-			<span>{points}</span>
-			<button className="btn btn-danger" onClick={handleRemoveStory}>
-				Dismiss
-			</button>
+			<span style={{ width: "30%" }}>{author}</span>
+			<span style={{ width: "10%" }}>{num_comments}</span>
+			<span style={{ width: "10%" }}>{points}</span>
+			<span style={{ width: "10%" }}>
+				<button className="button button_small" onClick={handleRemoveStory}>
+					Dismiss
+				</button>
+			</span>
 		</div>
 	);
 };
