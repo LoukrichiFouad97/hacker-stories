@@ -4,6 +4,7 @@ import axios from "axios";
 import { SearchForm } from "./SearchForm";
 import UseSemiPersistentState from "./useSemiPersistentState";
 import List from "./List";
+import { ReactComponent as Logo } from "./assets/activity.svg";
 
 import { StyledContainer, StyledHeadlinePrimary } from "./App.styled";
 
@@ -111,7 +112,10 @@ function App() {
 	return (
 		<>
 			<StyledContainer>
-				<StyledHeadlinePrimary>My Hacker Stories</StyledHeadlinePrimary>
+				<StyledHeadlinePrimary>
+					<Logo height="70px" width="70px" />
+					My Hacker Stories
+				</StyledHeadlinePrimary>
 				<SearchForm
 					onSearch={changeHandler}
 					search={searchTerm}

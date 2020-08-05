@@ -1,6 +1,7 @@
 import React from "react";
 
 import { StyledItem, StyledColumn, StyledButtonSmall } from "./App.styled";
+import { ReactComponent as Check } from "./assets/check.svg";
 
 const Item = ({ title, url, author, num_comments, points, onRemoveItem }) => {
 	function handleRemoveStory(item) {
@@ -18,6 +19,7 @@ const Item = ({ title, url, author, num_comments, points, onRemoveItem }) => {
 			<StyledColumn width="10%">
 				<StyledButtonSmall onClick={handleRemoveStory}>
 					Dismiss
+					<Check height="18px" width="18px" />
 				</StyledButtonSmall>
 			</StyledColumn>
 		</StyledItem>

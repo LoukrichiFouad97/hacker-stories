@@ -19,6 +19,10 @@ export const StyledHeadlinePrimary = styled.h1`
 	font-size: 48px;
 	font-weight: 300;
 	letter-spacing: 2px;
+	svg {
+		margin-right: 10px;
+		margin-bottom: 5px;
+	}
 `;
 
 export const StyledItem = styled.div`
@@ -51,6 +55,13 @@ export const StyledButton = styled.button`
 	&:hover {
 		background: #171212;
 		color: #fff;
+	}
+
+	svg {
+		g {
+			fill: #fff;
+			strock: #fff;
+		}
 	}
 `;
 
