@@ -1,5 +1,7 @@
 import React, { useEffect, useRef } from "react";
+
 import styles from "./App.module.css";
+import { StyledLabel, StyledInput } from "./App.styled";
 
 export const InputWithLabel = ({
 	id,
@@ -19,11 +21,9 @@ export const InputWithLabel = ({
 
 	return (
 		<>
-			<label className="label" htmlFor={id}>
-				{children}
-			</label>
+			<StyledLabel htmlFor={id}>{children}</StyledLabel>
 			&nbsp;
-			<input
+			<StyledInput
 				type={type}
 				id={id}
 				onChange={onSearch}
