@@ -1,9 +1,12 @@
 import React from "react";
 import { InputWithLabel } from "./InputWithLabel";
 
+import styles from "./App.module.css";
+import cs from "classnames";
+
 export const SearchForm = ({ handleSearchSubmit, onSearch, searchTerm }) => {
 	return (
-		<form onSubmit={handleSearchSubmit} className="search-form">
+		<form onSubmit={handleSearchSubmit} className={styles.searchForm}>
 			<InputWithLabel
 				id="search"
 				label="Search"
@@ -14,7 +17,10 @@ export const SearchForm = ({ handleSearchSubmit, onSearch, searchTerm }) => {
 			>
 				Search:
 			</InputWithLabel>
-			<button className="button button_large" id="basic-addon2">
+			<button
+				className={cs(styles.button, styles.buttonLarge)}
+				id="basic-addon2"
+			>
 				Search
 			</button>
 		</form>

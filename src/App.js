@@ -5,7 +5,7 @@ import { SearchForm } from "./SearchForm";
 import UseSemiPersistentState from "./useSemiPersistentState";
 import List from "./List";
 
-import "./App.css";
+import { StyledContainer, StyledHeadlinePrimary } from "./App.styled";
 
 function App() {
 	// action types
@@ -110,20 +110,18 @@ function App() {
 
 	return (
 		<>
-			<div className="my-container header" style={{ height: "200px" }}>
-				<div>
-					<h1>My Hacker Stories</h1>
-					<SearchForm
-						onSearch={changeHandler}
-						search={searchTerm}
-						onInputChange={handleSearchInput}
-						handleSearchSubmit={handleSearchSubmit}
-					/>
-					<p>
-						You searched for: <span>{searchTerm}</span>{" "}
-					</p>
-				</div>
-			</div>
+			<StyledContainer>
+				<StyledHeadlinePrimary>My Hacker Stories</StyledHeadlinePrimary>
+				<SearchForm
+					onSearch={changeHandler}
+					search={searchTerm}
+					onInputChange={handleSearchInput}
+					handleSearchSubmit={handleSearchSubmit}
+				/>
+				<p>
+					You searched for: <span>{searchTerm}</span>{" "}
+				</p>
+			</StyledContainer>
 			<hr />
 
 			{error}

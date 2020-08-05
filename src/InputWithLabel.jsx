@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import styles from "./App.module.css";
 
 export const InputWithLabel = ({
 	id,
@@ -7,7 +8,6 @@ export const InputWithLabel = ({
 	searchTerm,
 	children,
 	isFocused,
-	handleSearchSubmit,
 }) => {
 	const inputRef = useRef();
 
@@ -29,7 +29,7 @@ export const InputWithLabel = ({
 				onChange={onSearch}
 				value={searchTerm}
 				ref={inputRef}
-				className="input"
+				className={styles.input}
 				placeholder="Search"
 			/>
 		</>
