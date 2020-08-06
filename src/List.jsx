@@ -1,9 +1,11 @@
-import React from "react";
+import React, { memo } from "react";
+
 import Item from "./Item";
 
-const List = ({ list, onRemoveItem }) =>
-	list.map(({ objectID, ...item }) => (
-		<Item key={objectID} {...item} onRemoveItem={onRemoveItem} />
-	));
-
-export default List;
+export const List = memo(
+	({ list, onRemoveItem }) =>
+		console.log("B:List") ||
+		list.map(({ objectID, ...item }) => (
+			<Item key={objectID} {...item} onRemoveItem={onRemoveItem} />
+		))
+);

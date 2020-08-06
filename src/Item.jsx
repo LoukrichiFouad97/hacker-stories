@@ -8,6 +8,7 @@ const Item = ({ title, url, author, num_comments, points, onRemoveItem }) => {
 		onRemoveItem(item);
 	}
 
+	console.log('Item')
 	return (
 		<StyledItem>
 			<StyledColumn width="40%">

@@ -1,14 +1,22 @@
-import React, { useEffect, useReducer, useCallback, useState } from "react";
+import React, {
+	useEffect,
+	useReducer,
+	useCallback,
+	useState,
+	useMemo,
+} from "react";
 import axios from "axios";
 
 import { SearchForm } from "./SearchForm";
 import UseSemiPersistentState from "./useSemiPersistentState";
-import List from "./List";
+import { List } from "./List";
 import { ReactComponent as Logo } from "./assets/activity.svg";
 
 import { StyledContainer, StyledHeadlinePrimary } from "./App.styled";
 
 function App() {
+	console.log("B:App");
+
 	// action types
 	const REMOVE_STORIES = "REMOVE_STORIES";
 	const STORIES_FETCH_INIT = "STORIES_FETCH_INIT";
@@ -38,11 +46,14 @@ function App() {
 					isError: true,
 				};
 			case REMOVE_STORIES:
-				return state.data.filter(
-					(story) => story.objectID !== payload.objectID
-				);
+				return {
+					...state,
+					data: state.data.filter(
+						(story) => payload.objectID !== story.objectID
+					),
+				};
 			default:
-				return state;
+				throw new Error();
 		}
 	};
 
@@ -54,9 +65,9 @@ function App() {
 
 	const [stories, dispatchStories] = useReducer(storiesReducer, INITIAL_STATE);
 
-	const handleRemoveStory = (item) => {
+	const handleRemoveStory = useCallback((item) => {
 		dispatchStories({ type: "REMOVE_STORIES", payload: item });
-	};
+	}, []);
 
 	const [searchTerm, setSearchTerm] = UseSemiPersistentState(
 		"searchTerm",
@@ -99,15 +110,28 @@ function App() {
 		setUrl(`${API_ENDPOINT}${searchTerm}`);
 	};
 
+	// error handling when fetching data
 	const error = stories.isError && (
 		<h3 className="text-center text-danger">Oops! Something went wrong...</h3>
 	);
 
+	// display loading while fetching data
 	const loading = stories.isLoading ? (
 		<h3 className="text-center">Loading Stories...</h3>
 	) : (
 		<List list={stories.data} onRemoveItem={handleRemoveStory} />
 	);
+
+	const getSumComments = (stories) => {
+		console.log("C");
+
+		return stories.data.reduce(
+			(result, value) => result + value.num_comments,
+			0
+		);
+	};
+
+	const sumComments = useMemo(() => getSumComments(stories), [stories]);
 
 	return (
 		<>
@@ -127,6 +151,7 @@ function App() {
 				</p>
 			</StyledContainer>
 			<hr />
+			<h1>My hacker stories with {sumComments} comments</h1>
 
 			{error}
 			{loading}
